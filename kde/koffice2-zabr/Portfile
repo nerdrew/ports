@@ -13,7 +13,7 @@ long_description    ${description}
 platforms           darwin
 homepage            http://www.kde.org
 distname            koffice-${version}
-master_sites        kde:unstable/${distname}/src/
+master_sites        kde:stable/${distname}/src/
 use_bzip2           yes
 checksums           md5 1b44eb284f35d148ea6aacb0f2408277
 
