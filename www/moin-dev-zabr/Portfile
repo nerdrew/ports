@@ -1,0 +1,28 @@
+# $Id: Portfile 49731 2009-04-17 00:24:08Z raimue@macports.org $
+
+PortSystem 1.0
+PortGroup python25 1.0
+
+name                moin-dev-zabr
+version             1.9.0beta3
+categories          www python
+platforms           darwin
+maintainers         nomaintainer
+description         a Python-based WikiEngine
+long_description    MoinMoin is an advanced, easy to use \
+                    and extensible WikiEngine with a large \
+                    community of users. Said in a few words, \
+                    it is about collaboration on easily \
+                    editable web pages. MoinMoin is \
+                    Free Software licensed under the GNU GPL.
+distname            moin-${version}
+
+homepage            http://moinmo.in/
+master_sites        http://static.moinmo.in/files/
+checksums           md5 c4dcd0eb2b6f976a6c53bebc53c52fea
+
+post-destroot {
+    set docdir ${prefix}/share/doc/${name}
+    xinstall -m 644 -W ${worksrcpath} README ${destroot}/${docdir}
+    copy ${worksrcpath}/docs ${destroot}${docdir}
+}

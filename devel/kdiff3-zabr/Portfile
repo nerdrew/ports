@@ -1,0 +1,41 @@
+# $Id: Portfile 37000 2008-05-22 17:02:35Z simon@macports.org $
+
+PortSystem          1.0
+
+name                kdiff3-zabr
+version             0.9.95
+categories          devel
+platforms           darwin
+maintainers         simon openmaintainer
+description         kdiff3 is a file comparing and merging tool.
+long_description    kdiff3 compares two or three input files and shows the \
+                    differences line by line and character by character. It \
+                    provides an automatic merge facility and an integrated \
+                    editor for comfortable solving of merge conflicts. \
+                    kdiff3 allows recursive directory comparison and merging \
+                    as well.
+
+homepage            http://kdiff3.sourceforge.net/
+distname            kdiff3-${version}
+master_sites        sourceforge
+master_sites.mirror_subdir  kdiff3
+
+checksums           md5 652a98bf79ba762a8a646d4a0fddb323 \
+                    sha1 1fb27e8b42463ea23ad0169e20819352c1c476b7 \
+                    rmd160 7fc03495f581c9089f6914499c7237b49f053d98
+
+depends_lib         port:kdelibs4
+
+configure.cmd       qmake-mac
+configure.args      kdiff3.pro
+configure.pre_args  
+worksrcdir          ${distname}/src-QT4
+
+
+destroot {}
+
+build.env           ${configure.env}
+build.target        
+
+livecheck.check     regex
+livecheck.regex     "Current version: (\\d+(?:\\.\\d+)*)"

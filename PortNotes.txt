@@ -1,0 +1,2 @@
+Conflicts
+hicolor-icon-theme @0.10_0 & kdebase4-runtime both use: /opt/local/share/icons/hicolor/index.theme
