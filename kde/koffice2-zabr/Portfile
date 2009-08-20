@@ -15,7 +15,7 @@ homepage            http://www.kde.org
 distname            koffice-${version}
 master_sites        kde:stable/${distname}/src/
 use_bzip2           yes
-checksums           md5 1b44eb284f35d148ea6aacb0f2408277
+checksums           md5 75d812cdf59e5b0ec31dba9ac899417a
 
 # From the koffice cmake output:
 # exiv2 is necessary for Krita
