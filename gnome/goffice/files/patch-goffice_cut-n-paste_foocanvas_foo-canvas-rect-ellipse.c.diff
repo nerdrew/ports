@@ -1,0 +1,64 @@
+--- goffice/cut-n-paste/foocanvas/foo-canvas-rect-ellipse-orig.c	2008-07-08 04:54:59.000000000 -0500
++++ goffice/cut-n-paste/foocanvas/foo-canvas-rect-ellipse.c	2009-04-12 20:02:17.000000000 -0500
+@@ -42,9 +42,11 @@
+ #include <string.h>
+ 
+ #ifdef HAVE_RENDER
++#ifdef HAVE_X
+ #include <gdk/gdkx.h>
+ #include <X11/extensions/Xrender.h>
+-#endif
++#endif /* HAVE_X */
++#endif /* HAVE_RENDER */
+ 
+ /* Base class for rectangle and ellipse item types */
+ 
+@@ -766,9 +768,11 @@
+ 	int last_outline_update_width;
+ 
+ #ifdef HAVE_RENDER
++#ifdef HAVE_X
+ 	gboolean use_render;
+ 	XRenderPictFormat *format;
+-#endif
++#endif /* HAVE_X */
++#endif /* HAVE_RENDER */
+ };
+ 
+ GType
+@@ -838,6 +842,7 @@
+ foo_canvas_rect_realize  (FooCanvasItem *item)
+ {
+ #ifdef HAVE_RENDER
++#ifdef HAVE_X
+ 	FooCanvasRectPrivate *priv;
+ 	int event_base, error_base;
+ 	Display *dpy;
+@@ -856,7 +861,8 @@
+ 
+ 		priv->format = XRenderFindVisualFormat (dpy, visual);
+ 	}
+-#endif
++#endif /* HAVE_X */
++#endif /* HAVE_RENDER */
+ 
+ 	if (FOO_CANVAS_ITEM_CLASS (rect_parent_class)->realize) {
+ 		(* FOO_CANVAS_ITEM_CLASS (rect_parent_class)->realize) (item);
+@@ -889,6 +895,7 @@
+ 	a = (rgba >> 0) & 0xff;
+ 
+ #ifdef HAVE_RENDER
++#ifdef HAVE_X
+ 	/* Every visual is not guaranteed to have a matching
+ 	 * XRenderPictFormat. So make sure that format is not null before
+ 	 * trying to render using Xrender calls.
+@@ -935,7 +942,8 @@
+ 
+ 		return;
+ 	}
+-#endif
++#endif /* HAVE_X */
++#endif /* HAVE_RENDER */
+ 	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, width, height);
+ 	data = gdk_pixbuf_get_pixels (pixbuf);
+ 	rowstride = gdk_pixbuf_get_rowstride (pixbuf);
