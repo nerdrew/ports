@@ -1,27 +1,26 @@
 # -*- coding: utf-8; mode: tcl; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; truncate-lines: t -*- vim:fenc=utf-8:et:sw=4:ts=4:sts=4
-# $Id: Portfile 48181 2009-03-16 04:15:56Z mcalhoun@macports.org $
+# $Id: Portfile 54186 2009-07-22 19:46:27Z macsforever2000@macports.org $
 
 PortSystem          1.0
 
 name                qt4-mac
-version             4.5.0
-revision            0
+version             4.5.2
+revision            1
 categories          aqua
 platforms           macosx
-maintainers         illogic-al openmaintainer
+maintainers         erickt gmail.com:clubjuggler openmaintainer
 
 homepage            http://www.trolltech.com/
 description         Qt Tool Kit (Native Aqua Version)
 long_description    This is Qt, TrollTech's C++ toolkit for writing cross-platform GUI applications. \
                     This version uses the native Aqua UI. For a X11 version, see qt4-x11.
-master_sites        ftp://ftp.trolltech.com/qt/source/ \
-                    http://wftp.tu-chemnitz.de/pub/Qt/qt/source/ \
-                    http://ftp.heanet.ie/mirrors/ftp.trolltech.com/pub/qt/source/
+master_sites        trolltech
 distname            qt-mac-opensource-src-${version}
-checksums  \
-    md5     c66a3f3211529b456086284f87f17393 \
-    sha1    7b4f0a2512352bda9ae90e4bcfdb5ee621ab27e1 \
-    rmd160  3abcf1a3b917a6dbbbbc4d915db3fbb538262c70
+
+checksums           \
+    md5     c549d6c0c2e0723377cb955c78a1b680 \
+    sha1    61b45db17962b48c338628d58c0445c9f544d5e6 \
+    rmd160  53c752de43aa0623f005ca1c5a12810acc1da013
 
 depends_build       port:pkgconfig
 
@@ -36,13 +35,11 @@ depends_lib       \
     port:sqlite3
 
 # Build plugins as bundle files instead of dylib files.
-# Allow the use of -isystem instead of -I to include files.
 # Test for Precompiled-headers support requires a C++ compiler, but configure calls it, by default, with a C compiler.
 # Use unixODBC provided by MacPorts instead of iODBC provided my Mac OS.
 # Ensure that securesocketclient demo is built even with configure option -openssl-linked.
 patchfiles                   \
     patch-mac.conf.diff      \
-    patch-isystem.diff       \
     patch-precomp.test.diff  \
     patch-odbc.diff          \
     patch-network.pro.diff
@@ -53,14 +50,14 @@ patchfiles                   \
 # --prefix is not recognized.
 configure.pre_args-delete  --prefix=${prefix}
 # -I${prefix}/include and -L${prefix}/lib must be set in ${configure.args}
-#    or else some generated Makefiles will not seem them.
+# or else some generated Makefiles will not see them.
 configure.cppflags
 configure.ldflags
 
 set dirname qt4-mac
 set qt_dir ${prefix}/libexec/${dirname}
 
-# -isystem is used instead of -I to avoid conflicts with other ports (e.g. pcre).
+#  CPATH is used instead of -I to avoid conflicts with other ports.
 #  See http://trac.macports.org/ticket/15219 and http://trac.macports.org/ticket/18723.
 #
 # -system-sqlite ensures the use SQLite provided by MacPorts instead of Qt.
@@ -73,6 +70,7 @@ configure.args                                            \
     -v                                                    \
     -debug-and-release                                    \
     -confirm-license                                      \
+    -opensource                                           \
     -prefix          ${qt_dir}                            \
     -docdir          ${prefix}/share/doc/${dirname}       \
     -examplesdir     ${prefix}/share/${dirname}/examples  \
@@ -80,8 +78,22 @@ configure.args                                            \
     -system-sqlite                                        \
     -openssl-linked                                       \
     -dbus-linked                                          \
-    -isystem${prefix}/include                             \
     -L${prefix}/lib
+
+lappend cpath        ${prefix}/include
+lappend library_path ${prefix}/lib
+
+pre-configure {
+    configure.env-append \
+        CPATH=[join ${cpath} :] \
+        LIBRARY_PATH=[join ${library_path} :]
+}
+
+pre-build {
+    build.env-append \
+        CPATH=[join ${cpath} :] \
+        LIBRARY_PATH=[join ${library_path} :]
+}
 
 # Stop configure script from searching for SQL Drivers
 #    not available from MacPorts.
@@ -100,10 +112,9 @@ foreach driver {mysql odbc psql sqlite2} {
 variant mysql description {Enable MySQL SQL Driver} {
     depends_lib-append path:lib/mysql5:mysql5
 
-    configure.args-append \
-        -isystem${prefix}/include/mysql5/mysql \
-        -L${prefix}/lib/mysql5/mysql
-
+    lappend cpath        ${prefix}/include/mysql5/mysql
+    lappend library_path ${prefix}/lib/mysql5/mysql
+    
     configure.args-delete -no-sql-mysql
 }
 
@@ -115,20 +126,19 @@ variant odbc description {Enable unixODBC SQL Driver} {
 variant psql description {Enable PostgreSQL SQL Driver} {
     depends_lib-append port:postgresql83
 
-    configure.args-append \
-        -isystem${prefix}/include/postgresql83 \
-        -L${prefix}/lib/postgresql83
+    lappend cpath        ${prefix}/include/postgresql83
+    lappend library_path ${prefix}/lib/postgresql83
 
     configure.args-delete -no-sql-psql
 }
 
-variant sqlite2 description {Enable MySQL version 2 SQL Driver} {
+variant sqlite2 description {Enable SQLite version 2 SQL Driver} {
     depends_lib-append port:sqlite2
     configure.args-delete -no-sql-sqlite2
 }
 
-variant cocoa description {Build the Cocoa version of Qt in 32-bit mode} conflicts noframework {
-    configure.args-append  -cocoa
+variant cocoa description {Build the Cocoa version of Qt in 32-bit and 64-bit modes} conflicts noframework {
+    configure.args-append  -cocoa -arch x86_64
 
     # Everything might build, but nothing will run.
     pre-fetch {
@@ -148,22 +158,16 @@ use_parallel_build  yes
 destroot.destdir    INSTALL_ROOT="${destroot}"
 
 post-patch {
-    # Ensure that securesocketclient demo is built.
-    reinplace "s|contains(QT_CONFIG, openssl)|contains(QT_CONFIG, openssl) \\| contains(QT_CONFIG, openssl-linked)|" \
-        ${worksrcpath}/examples/network/network.pro
-
-    # Ensure that MacPorts compilers are used.
+    # Ensure that correct compilers are used.
     reinplace "s| g++\$| ${configure.cxx}|" ${worksrcpath}/mkspecs/common/g++.conf
-    reinplace "s| gcc\$| ${configure.cc}|"  ${worksrcpath}/mkspecs/common/g++.conf
-    reinplace "s| g++\$| ${configure.cxx}|" ${worksrcpath}/mkspecs/common/mac-g++.conf
     reinplace "s| gcc\$| ${configure.cc}|"  ${worksrcpath}/mkspecs/common/g++.conf
     reinplace "s| g++\$| ${configure.cxx}|" ${worksrcpath}/mkspecs/macx-g++/qmake.conf
 }
 
 post-destroot {
     # Install documentation.
-    foreach doc { INSTALL LICENSE.LGPL LICENSE.GPL3 LGPL_EXCEPTION.txt README } {
-        xinstall -c -m 644 ${worksrcpath}/$doc ${destroot}${prefix}/share/doc/${portname}
+    foreach doc { FAQ.txt INSTALL LGPL_EXCEPTION.txt LICENSE.GPL3 LICENSE.LGPL README } {
+        xinstall -c -m 644 ${worksrcpath}/$doc ${destroot}${prefix}/share/doc/${name}
     }
 
     # Create link in ${prefix}/bin to executable files in ${qt_dir}/bin.
@@ -220,7 +224,16 @@ variant raster description {Use raster graphics system by default} {
 
 variant universal {
     configure.universal_args-delete --disable-dependency-tracking
-    configure.args-append -arch \"${universal_archs}\"
+    foreach arch ${universal_archs} {
+        if { ${arch}=="i386" } {
+            configure.args-append -arch x86
+        } else {
+            configure.args-append -arch ${arch}
+        }
+    }
+    if {[info exists universal_sysroot]} {
+        configure.args-append -sdk ${universal_sysroot}
+    }
 }
 
 livecheck.check     regex

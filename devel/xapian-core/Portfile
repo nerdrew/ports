@@ -1,0 +1,25 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+# $Id: Portfile 52070 2009-06-09 17:51:59Z jmr@macports.org $
+
+PortSystem 1.0
+
+name                xapian-core
+version             1.0.15
+categories          devel
+maintainers         loonsoft.com:m
+description         Xapian search library
+long_description    Xapian is a highly adaptable toolkit which allows \
+                    developers to easily add advanced indexing and search \
+                    facilities to their own applications. It supports the \
+                    Probabilistic Information Retrieval model and also \
+                    supports a rich set of boolean query operators.
+
+homepage            http://www.xapian.org/
+platforms           darwin
+master_sites        http://oligarchy.co.uk/xapian/${version}/
+
+checksums           md5 d851e661966fa0446cb46d7352c84a98 \
+                    sha1 1427c0cba5e6973781c6ea08d55f082cb9f5829b \
+                    rmd160 a2c6b3c3cc7f310d02db91a36e5d6800587ebe98
+
+depends_lib         port:zlib

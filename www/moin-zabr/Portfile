@@ -1,7 +1,7 @@
 # $Id: Portfile 49731 2009-04-17 00:24:08Z raimue@macports.org $
 
 PortSystem 1.0
-PortGroup python25 1.0
+PortGroup python26 1.0
 
 name                moin-zabr
 version             1.8.4

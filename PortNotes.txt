@@ -1,2 +1,10 @@
 Conflicts
 hicolor-icon-theme @0.10_0 & kdebase4-runtime both use: /opt/local/share/icons/hicolor/index.theme
+
+
+Problems in 10.6:
+xapian-core
+gcc42
+gcc44
+avr-gcc (gcc40 fails)
+pango +no_x11 +quartz
