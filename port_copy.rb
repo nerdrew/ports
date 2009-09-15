@@ -22,9 +22,14 @@ end
 
 port_dir = File.basename(port_path)
 category_dir = File.basename(File.absolute_path(port_path"/.."))
-
 custom_ports = "#{ENV['HOME']}/ports"
+
 if !Dir.exists?("#{custom_ports}/#{category}")
 	FileUtils.mkdir("#{custom_ports}/#{category}")
 end
-FileUtils.cp_r(port_path, "#{custom_ports}/#{category}"))
+
+if !Dir.exists?("#{custom_ports}/#{category}/#{port_path}"
+	FileUtils.cp_r(port_path, "#{custom_ports}/#{category}"))
+else
+	# merge port
+end
