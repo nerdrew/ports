@@ -31,5 +31,7 @@ end
 if !Dir.exists?("#{custom_ports}/#{category}/#{port_path}"
 	FileUtils.cp_r(port_path, "#{custom_ports}/#{category}"))
 else
-	# merge port
+	# future merge port
+	puts "The port already exists."
+	exit
 end
