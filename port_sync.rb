@@ -1,11 +1,10 @@
 #!/opt/local/bin/ruby1.9
 
-puts "Enter sudo password."
-`sudo port sync`
+`sudo -n port sync`
 
 if $?.exitstatus != 0
 	puts "port sync had an error"
-	exit
+	#exit
 end
 
 # is a > b
