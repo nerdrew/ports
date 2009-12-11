@@ -5,7 +5,7 @@
 	<key>Disabled</key>
 	<true/>
 	<key>Label</key>
-	<string>org.macports.apache.httpd</string>
+	<string>org.macports.apache2</string>
 	<key>ProgramArguments</key>
 	<array>
 		<string>/opt/local/apache2/bin/httpd</string>

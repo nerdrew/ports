@@ -66,7 +66,7 @@ ULIMIT_MAX_FILES=""
 # ||||||||||||||||||||   END CONFIGURATION SECTION  ||||||||||||||||||||
 
 LAUNCHCTL="/bin/launchctl"
-LAUNCHD_JOB="/opt/local/etc/LaunchDaemons/org.macports.apache.httpd.plist"
+LAUNCHD_JOB="/Library/LaunchDaemons/org.macports.apache2.plist"
 
 run_launchctl() {
     if [ $UID != 0 ]; then
