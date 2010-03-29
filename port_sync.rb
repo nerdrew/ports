@@ -35,7 +35,7 @@ File.open("#{ENV['HOME']}/ports/PortIndex.quick") do |pi|
 	alt_port_versions = 
 		`port info --line --version #{duplicate_ports.collect{|dp| dp[0][0]}.join(' ')}`.split("\n--\n")
 	duplicate_ports.zip(alt_port_versions).each do |ports, ver|
-		(std_ver, alt_ver) = (ver.strip == ports[0][1]) ? [1,0] : [0,1]
+		(std_ver, alt_ver) = ((ver || "").strip == ports[0][1]) ? [1,0] : [0,1]
 		if !compare_version(ports[alt_ver][1], ports[std_ver][1])
 			puts "The custom #{ports[0][0]}@#{ports[alt_ver][1]} is an older version than the standard (@#{ports[std_ver][1]})."
 		end

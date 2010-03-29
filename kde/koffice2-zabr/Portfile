@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           kde4    1.0
 
 name                koffice2-zabr
-version             2.0.2
+version             2.1.81
 revision            0
 categories          kde kde4
 maintainers         nomaintainer
