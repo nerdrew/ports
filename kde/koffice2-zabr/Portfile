@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           kde4    1.0
 
 name                koffice2-zabr
-version             2.1.81
+version             2.2.0
 revision            0
 categories          kde kde4
 maintainers         nomaintainer
@@ -13,9 +13,9 @@ long_description    ${description}
 platforms           darwin
 homepage            http://www.kde.org
 distname            koffice-${version}
-master_sites        kde:stable/${distname}/src/
+master_sites        kde:stable/${distname}/
 use_bzip2           yes
-checksums           md5 75d812cdf59e5b0ec31dba9ac899417a
+checksums           md5 204afae16ff90148a61752bccd86b278
 
 # From the koffice cmake output:
 # exiv2 is necessary for Krita
