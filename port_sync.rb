@@ -1,4 +1,4 @@
-#!/opt/local/bin/ruby1.9
+#!/usr/bin/env ruby
 
 `sudo -n port sync`
 
