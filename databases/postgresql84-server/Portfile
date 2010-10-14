@@ -36,7 +36,7 @@ destroot {
 	xinstall -m 755 -d ${destroot}${logdir}
 	system "touch ${destroot}${logdir}/postgres.log"
 	system "chown ${dbuser}:${dbgrp} ${destroot}${logdir}/postgres.log"
-	xinstall -m 755 -d ${destroot}${prefix}/etc/LaunchDaemons/org.macports.postgresql84-server/
+	xinstall -d ${destroot}${prefix}/etc/LaunchDaemons/org.macports.postgresql84-server/
 	xinstall -m 644 ${filespath}/org.macports.postgresql84-server.plist ${destroot}${prefix}/etc/LaunchDaemons/org.macports.postgresql84-server/
 }
 

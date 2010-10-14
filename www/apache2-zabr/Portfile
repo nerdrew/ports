@@ -116,6 +116,12 @@ post-destroot {
     xinstall -d ${destroot}${docdir}
     xinstall -m 0644 -W ${worksrcpath} ABOUT_APACHE CHANGES LICENSE NOTICE README \
         README.platforms ROADMAP VERSIONING ${destroot}${docdir}
+
+    # use my launchd startup item, fix apachectl to use launchd
+    xinstall -d ${destroot}${prefix}/etc/LaunchDaemons/org.macports.apache2
+    xinstall -m 0644 ${filespath}/org.macports.apache2.plist ${destroot}${prefix}/etc/LaunchDaemons/org.macports.apache2/
+
+    xinstall -m 0755 ${filespath}/apachectl ${destroot}${prefix}/apache2/bin/
 }
 
 post-activate {
@@ -172,13 +178,13 @@ variant no_startupitem description {Do not create a startup item} {
 	startupitem.create	no
 }
 
-startupitem.create	yes
-startupitem.start	\
-"\[ -x ${prefix}/apache2/bin/apachectl \] && ${prefix}/apache2/bin/apachectl start > /dev/null"
-startupitem.stop	\
-"\[ -r ${prefix}/apache2/logs/httpd.pid \] && ${prefix}/apache2/bin/apachectl stop > /dev/null"
-startupitem.restart	\
-"${prefix}/apache2/bin/apachectl restart > /dev/null"
+#startupitem.create	yes
+#startupitem.start	\
+#"\[ -x ${prefix}/apache2/bin/apachectl \] && ${prefix}/apache2/bin/apachectl start > /dev/null"
+#startupitem.stop	\
+#"\[ -r ${prefix}/apache2/logs/httpd.pid \] && ${prefix}/apache2/bin/apachectl stop > /dev/null"
+#startupitem.restart	\
+#"${prefix}/apache2/bin/apachectl restart > /dev/null"
 
 livecheck.type  regex
 livecheck.url   ${homepage}
