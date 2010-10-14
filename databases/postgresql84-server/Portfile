@@ -1,9 +1,9 @@
-# $Id: Portfile 61552 2009-12-14 18:49:42Z mww@macports.org $
+# $Id: Portfile 72405 2010-10-13 17:08:40Z jwa@macports.org $
 
 PortSystem 1.0
 
 name			postgresql84-server
-version			8.4.4
+version			8.4.5
 categories		databases
 platforms		darwin
 maintainers		mww jwa
@@ -27,14 +27,6 @@ set logdir		${prefix}/var/log/postgresql84
 set dbuser		postgres
 set dbgrp		postgres
 
-startupitem.create	yes
-startupitem.init	\
-	"PGCTL=${libdir}/bin/pg_ctl"
-startupitem.start	\
-	"su ${dbuser} -c \"\${PGCTL} -D \${POSTGRESQL84DATA:=${dbdir}} start -l ${logdir}/postgres.log\""
-startupitem.stop	\
-"su ${dbuser} -c \"\${PGCTL} -D \${POSTGRESQL84DATA:=${dbdir}} stop -s -m fast\""
-
 destroot {
 	addgroup ${dbgrp}
 	set gid [existsgroup ${dbgrp}]
@@ -44,6 +36,8 @@ destroot {
 	xinstall -m 755 -d ${destroot}${logdir}
 	system "touch ${destroot}${logdir}/postgres.log"
 	system "chown ${dbuser}:${dbgrp} ${destroot}${logdir}/postgres.log"
+	xinstall -m 755 -d ${destroot}${prefix}/etc/LaunchDaemons/org.macports.postgresql84-server/
+	xinstall -m 644 ${filespath}/org.macports.postgresql84-server.plist ${destroot}${prefix}/etc/LaunchDaemons/org.macports.postgresql84-server/
 }
 
 post-install {
