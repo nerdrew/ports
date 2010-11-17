@@ -1,10 +1,10 @@
 # $Id: Portfile 47839 2009-03-07 19:04:42Z illogic-al@macports.org $
 
 PortSystem          1.0
-PortGroup           kde4    1.0
+PortGroup           kde4    1.1
 
-name                koffice2-zabr
-version             2.2.0
+name                koffice2
+version             2.2.2
 revision            0
 categories          kde kde4
 maintainers         nomaintainer
@@ -15,7 +15,7 @@ homepage            http://www.kde.org
 distname            koffice-${version}
 master_sites        kde:stable/${distname}/
 use_bzip2           yes
-checksums           md5 204afae16ff90148a61752bccd86b278
+checksums           md5 f987ef488888311db04f313ef2c1ed74
 
 # From the koffice cmake output:
 # exiv2 is necessary for Krita
@@ -41,3 +41,5 @@ depends_lib-append  port:kdelibs4         \
 # The ports above can enable extra features (reportedly)
 
 configure.args-append  ../${distname}
+
+conflicts           koffice2-devel
