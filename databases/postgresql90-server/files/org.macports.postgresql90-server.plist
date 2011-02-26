@@ -3,7 +3,7 @@
 "http://www.apple.com/DTDs/PropertyList-1.0.dtd" >
 <plist version='1.0'>
 <dict>
-<key>Label</key><string>org.macports.postgresql84-server</string>
+<key>Label</key><string>org.macports.postgresql90-server</string>
 <key>UserName</key>
 <string>postgresql</string>
 <key>GroupName</key>
@@ -12,21 +12,21 @@
 <key>EnvironmentVariables</key>
 <dict>
   <key>PGDATA</key>
-  <string>/opt/local/var/db/postgresql/defaultdb84</string>
+  <string>/opt/local/var/db/postgresql/defaultdb90</string>
 </dict>
 
 <key>Program</key>
-<string>/opt/local/lib/postgresql84/bin/postmaster</string>
+<string>/opt/local/lib/postgresql90/bin/postmaster</string>
 
 <key>ProgramArguments</key>
 <array>
 </array>
 
 <key>StandardOutPath</key>
-<string>/opt/local/var/log/postgresql/postgresql84.log</string>
+<string>/opt/local/var/log/postgresql/postgresql90.log</string>
 
 <key>StandardErrorPath</key>
-<string>/opt/local/var/log/postgresql/postgresql84.log</string>
+<string>/opt/local/var/log/postgresql/postgresql90.log</string>
 
 <key>Debug</key><false/>
 <key>Disabled</key><true/>

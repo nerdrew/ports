@@ -1,0 +1,45 @@
+# $Id: Portfile 47839 2009-03-07 19:04:42Z illogic-al@macports.org $
+
+PortSystem          1.0
+PortGroup           kde4    1.1
+
+name                koffice2-devel
+version             2.2.83
+revision            0
+categories          kde kde4
+maintainers         nomaintainer
+description         The KDE Office suite. KOffice is built on the KDE4 platform
+long_description    ${description}
+platforms           darwin
+homepage            http://www.kde.org
+distname            koffice-${version}
+master_sites        kde:unstable/${distname}/
+use_bzip2           yes
+checksums           md5 77c5151e498a2880f406f25e71c8635f
+
+# From the koffice cmake output:
+# exiv2 is necessary for Krita
+# qca is necessary for encrypted OpenDocument files
+# openctl is necessary for extra color spaces (High Dynamic Range Color Spaces, YCbCr and LMS) (no port exists)
+# gsl is necessary for KSpread's solver plugin
+depends_lib-append  port:kdelibs4         \
+                    port:kdebase4         \
+                    port:kdebase4-runtime \
+                    port:kdepimlibs4      \
+                    port:cmake            \
+                    port:lcms             \
+                    port:eigen            \
+                    port:exiv2            \
+                    port:qimageblitz      \
+                    port:gsl              \
+                    port:qca              \
+                    port:graphicsmagick
+                    #port:libwpd port:libwpg 
+                    #port:pstoedit port:glew
+                    #port:poppler port:gmm
+                    #port:openctl # there is no openctl port
+# The ports above can enable extra features (reportedly)
+
+configure.args-append  ../${distname}
+
+conflicts           koffice2

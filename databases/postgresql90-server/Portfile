@@ -1,19 +1,19 @@
-# $Id: Portfile 72405 2010-10-13 17:08:40Z jwa@macports.org $
+# $Id$
 
 PortSystem 1.0
 
-name			postgresql84-server
-version			8.4.7
+name			postgresql90-server
+version			9.0.3
 categories		databases
 platforms		darwin
 maintainers		mww jwa
-description		run postgresql84 as server
+description		run postgresql90 as server
 long_description	${description}
 
 homepage		http://www.postgresql.org/
 master_sites		postgresql
 
-depends_run		port:postgresql84
+depends_run		port:postgresql90
 
 fetch	{}
 checksum	{}
@@ -21,9 +21,9 @@ extract	{}
 use_configure	no
 build	{}
 
-set libdir		${prefix}/lib/postgresql84
-set dbdir		${prefix}/var/db/postgresql/defaultdb84
-set logdir		${prefix}/var/log/postgresql84
+set libdir		${prefix}/lib/postgresql90
+set dbdir		${prefix}/var/db/postgresql/defaultdb90
+set logdir		${prefix}/var/log/postgresql90
 set dbuser		postgresql
 set dbgrp		postgresql
 
@@ -34,9 +34,9 @@ variant macports_launchd description {use macports default launchd config} {
   startupitem.init	\
     "PGCTL=${libdir}/bin/pg_ctl"
   startupitem.start	\
-    "su ${dbuser} -c \"\${PGCTL} -D \${POSTGRESQL84DATA:=${dbdir}} start -l ${logdir}/postgres.log\""
+    "su ${dbuser} -c \"\${PGCTL} -D \${POSTGRESQL90DATA:=${dbdir}} start -l ${logdir}/postgres.log\""
   startupitem.stop	\
-  "su ${dbuser} -c \"\${PGCTL} -D \${POSTGRESQL84DATA:=${dbdir}} stop -s -m fast\""
+  "su ${dbuser} -c \"\${PGCTL} -D \${POSTGRESQL90DATA:=${dbdir}} stop -s -m fast\""
 }
 
 variant apple_launchd description {use a more apple-like launchd config} {}
@@ -51,8 +51,8 @@ destroot {
 	system "touch ${destroot}${logdir}/postgres.log"
 	system "chown ${dbuser}:${dbgrp} ${destroot}${logdir}/postgres.log"
 	if {[variant_isset apple_launchd]} {
-    xinstall -d ${destroot}${prefix}/etc/LaunchDaemons/org.macports.postgresql84-server/
-    xinstall -m 644 ${filespath}/org.macports.postgresql84-server.plist ${destroot}${prefix}/etc/LaunchDaemons/org.macports.postgresql84-server/
+    xinstall -d ${destroot}${prefix}/etc/LaunchDaemons/org.macports.postgresql90-server/
+    xinstall -m 644 ${filespath}/org.macports.postgresql90-server.plist ${destroot}${prefix}/etc/LaunchDaemons/org.macports.postgresql90-server/
   }
 }
 
@@ -67,5 +67,5 @@ post-install {
 
 livecheck.type	regex
 livecheck.url	${homepage}
-livecheck.regex	(8.4.\[0-9\]+)
+livecheck.regex	(9\\.0\\.\[0-9\]+)
 

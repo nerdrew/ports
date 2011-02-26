@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN"
+"http://www.apple.com/DTDs/PropertyList-1.0.dtd" >
+<plist version='1.0'>
+<dict>
+<key>Label</key><string>org.macports.mysql5-server</string>
+<key>UserName</key><string>mysql</string>
+<key>GroupName</key><string>mysql</string>
+
+<key>Program</key>
+<string>/opt/local/libexec/mysqld</string>
+
+<key>ProgramArguments</key>
+<array>
+  <string>--datadir=/opt/local/var/db/mysql5</string>
+  <string>--basedir=/opt/local</string>
+  <string>--pid-file=/opt/local/var/run/mysql5/eddie.pid</string>
+</array>
+
+<key>StandardOutPath</key>
+<string>/opt/local/var/log/mysql5/output.log</string>
+
+<key>StandardErrorPath</key>
+<string>/opt/local/var/log/mysql5/error.log</string>
+
+<key>Debug</key><false/>
+<key>Disabled</key><true/>
+<key>OnDemand</key><false/>
+<key>RunAtLoad</key><false/>
+</dict>
+</plist>
