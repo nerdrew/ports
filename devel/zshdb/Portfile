@@ -18,8 +18,8 @@ long_description \
 homepage        https://github.com/rocky/zshdb
 platforms       darwin
 
-master_sites    https://github.com/rocky/zshdb/tarball
-distfiles        release-${version}
+master_sites    https://download.github.com/
+distfiles       rocky-zshdb-release-${version}-0-g054404d.tar.gz
 worksrcdir      rocky-${name}-054404d
 
 checksums       md5     ce34cf20e28b5f5ff929e9a7274215e3 \
