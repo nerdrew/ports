@@ -110,7 +110,7 @@ post-destroot {
     xinstall -m 0644 -W ${worksrcpath} ABOUT_APACHE CHANGES LICENSE NOTICE README \
         README.platforms ROADMAP VERSIONING ${destroot}${docdir}
 
-    if {[variant_isset use_launchctl]}{
+    if {[variant_isset use_launchctl]} {
         # use my launchd startup item, fix apachectl to use launchd
         xinstall -d ${destroot}${prefix}/etc/LaunchDaemons/org.macports.apache2
         xinstall -m 0644 ${filespath}/org.macports.apache2.plist ${destroot}${prefix}/etc/LaunchDaemons/org.macports.apache2/
