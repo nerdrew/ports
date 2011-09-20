@@ -1,9 +1,9 @@
-# $Id$
+# $Id: Portfile 72314 2010-10-10 17:10:01Z jwa@macports.org $
 
 PortSystem 1.0
 
 name			postgresql90-server
-version			9.0.3
+version			9.0.1
 categories		databases
 platforms		darwin
 maintainers		mww jwa
