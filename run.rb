@@ -21,6 +21,14 @@ def repo_clean?(dir = nil)
   end
 end
 
+def get_input(default = nil)
+  input = STDIN.gets
+  if input.nil? || input.size == 0
+    input = default || ''
+  end
+  return input.chomp.downcase
+end
+
 def update_tracking_from_macports
   exit if !repo_clean?
 
@@ -41,7 +49,7 @@ def update_tracking_from_macports
 
   if !repo_clean?(TRACKING_PORTS)
     print "Commit tracking changes to git? You need to do this before continuing. (Y/n): "
-    if (STDIN.gets || 'y').chomp.downcase == 'y'
+    if get_input('y') == 'y'
       puts IO.popen(['git', 'add', TRACKING_PORTS]) {|io| io.read}
       puts IO.popen(['git', 'commit', '-m', 'Auto-commit changes to tracking ports']) {|io| io.read} if $?.exitstatus == 0
     end
@@ -74,12 +82,12 @@ def update_custom_ports
   puts "There were #{failed_diffs.size} failed patches."
   failed_diffs.each do |category, port|
     print "#{category}/#{port} patch failed. (E)dit, (s)kip, (a)bort: "
-    case (STDIN.gets || 'e').chomp.downcase
+    case get_input('e')
     when "e"
       output = IO.popen(['mvim', '-O', File.join(CUSTOM_PORTS, category, port, "Portfile"), "#{category}_#{port}.diff"]) {|io| io.read}
       puts output if output
       print "Remove file '#{category}_#{port}.diff'? (Y/n): "
-      if (STDIN.gets || 'y').chomp.downcase == 'y'
+      if get_input('y') == 'y'
         FileUtils.rm("#{category}_#{port}.diff")
       end
     when "s"
