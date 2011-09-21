@@ -1,5 +1,5 @@
 # -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
-# $Id: Portfile 57375 2009-09-10 08:16:41Z ryandesign@macports.org $
+# $Id: Portfile 73897 2010-11-28 15:18:58Z jmr@macports.org $
 
 PortSystem          1.0
 
@@ -60,7 +60,7 @@ post-patch {
 use_parallel_build  yes
 
 pre-build {
-    ln -sf ${prefix}/bin/glibtool ${worksrcpath}/libtool
+    file copy -force ${prefix}/bin/glibtool ${worksrcpath}/libtool
 }
 
 post-destroot {
