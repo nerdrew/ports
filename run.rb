@@ -10,13 +10,15 @@ def repo_clean?(dir = nil)
   args = ['git', 'status', '--porcelain']
   args << dir if dir
   git_status = IO.popen(args){|io| io.read}
-  repo = dir ? /#{dir}/ : /#{TRACKING_PORTS}|#{CUSTOM_PORTS}/
-  if repo =~ git_status
-    puts git_status
+  repo =  dir || "#{TRACKING_PORTS}|#{CUSTOM_PORTS}"
+  if /#{repo}/ =~ git_status
     puts "Commit changes before running!"
+    puts git_status
     return false
+  else
+    puts "Repo clean: #{repo}."
+    return true
   end
-  return true
 end
 
 def update_tracking_from_macports
@@ -46,7 +48,7 @@ def update_tracking_from_macports
   end
 end
 
-def sync
+def update_custom_ports
   exit if !repo_clean?
 
   failed_diffs = []
@@ -102,7 +104,8 @@ end
 
 case ARGV[0]
 when "sync"
-  sync
+  update_tracking_from_macports
+  update_custom_ports
 else
   puts "Usage: #{__FILE__} <sync>"
 end
