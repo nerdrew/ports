@@ -1,9 +1,9 @@
-# $Id: Portfile 72405 2010-10-13 17:08:40Z jwa@macports.org $
+# $Id: Portfile 79251 2011-06-07 01:53:45Z jmr@macports.org $
 
 PortSystem 1.0
 
 name			postgresql84-server
-version			8.4.7
+version			8.4.8
 categories		databases
 platforms		darwin
 maintainers		mww jwa
@@ -50,6 +50,7 @@ destroot {
 	xinstall -m 755 -d ${destroot}${logdir}
 	system "touch ${destroot}${logdir}/postgres.log"
 	system "chown ${dbuser}:${dbgrp} ${destroot}${logdir}/postgres.log"
+	system "chown -R ${dbuser}:${dbgrp} ${destroot}${logdir}"
 	if {[variant_isset apple_launchd]} {
     xinstall -d ${destroot}${prefix}/etc/LaunchDaemons/org.macports.postgresql84-server/
     xinstall -m 644 ${filespath}/org.macports.postgresql84-server.plist ${destroot}${prefix}/etc/LaunchDaemons/org.macports.postgresql84-server/
@@ -63,6 +64,11 @@ post-install {
 		sudo su ${dbuser} -c \'${libdir}/bin/initdb -D ${dbdir}\'"
 	ui_msg "\nTo tweak your DBMS, consider increasing kern.sysv.shmmax\
 		by adding an increased kern.sysv.shmmax .. to /etc/sysctl.conf"
+}
+
+post-activate {
+    # ensure log dir is owned by postgres even if it existed previously
+    catch {file attributes $logdir -owner $dbuser -group $dbgrp}
 }
 
 livecheck.type	regex
