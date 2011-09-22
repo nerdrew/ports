@@ -108,7 +108,10 @@ def update_custom_ports
   end #do
 
   # Copy the new updated custom ports to the macports sources folder
-  #`sudo cp -r #{custom_ports}/* #{macports_ports}`
+  `sudo cp -r #{CUSTOM_PORTS}/* #{MACPORTS_PORTS}`
+
+  # Refresh the portindex
+  `sudo portindex #{MACPORTS_PORTS}`
 
   #puts `git add #{custom_ports} && git commit -m "Auto-commit tracking patches applied to custom ports"`
   #exit if $?.exitstatus > 0
