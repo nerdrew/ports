@@ -11,7 +11,6 @@ def repo_clean?(dir = nil)
   git_status = IO.popen(args){|io| io.read}
   repo =  dir || "#{TRACKING_PORTS}|#{CUSTOM_PORTS}"
   if /#{repo}/ =~ git_status
-    puts "Commit changes before running!"
     puts git_status
     return false
   else
@@ -33,7 +32,13 @@ def get_input(allowed, default = nil)
 end
 
 def update_tracking_from_macports
-  exit if !repo_clean?(TRACKING_PORTS)
+  if !repo_clean?(TRACKING_PORTS)
+    puts "Commit changes before running!"
+    exit
+  end
+
+  puts "Running `port sync`"
+  print `sudo port sync`
 
   Dir.foreach(CUSTOM_PORTS) do |category|
     next if category == "." || category == ".."
@@ -49,35 +54,31 @@ def update_tracking_from_macports
       FileUtils.cp_r(macport, tracking)
     end
   end
-
-  if !repo_clean?(TRACKING_PORTS)
-    print "Commit tracking changes to git? You need to do this before continuing. (Y/n): "
-    if get_input(%w(y n), 'y') == 'y'
-      puts "Committing changes."
-      puts IO.popen(['git', 'add', TRACKING_PORTS]) {|io| io.read}
-      puts IO.popen(['git', 'commit', '-m', 'Auto-commit changes to tracking ports']) {|io| io.read} if $?.exitstatus == 0
-    end
-  end
 end
 
 def update_custom_ports
-  exit if !repo_clean?
+  if !repo_clean?(CUSTOM_PORTS)
+    puts "Commit changes before running!"
+    exit
+  end
 
   failed_diffs = []
   Dir.foreach(CUSTOM_PORTS) do |category|
     next if category == "." || category == ".."
 
-    tracking = File.join(TRACKING_PORTS, category)
     Dir.foreach(File.join(CUSTOM_PORTS, category)) do |port|
       next if port == "." || port == ".."
 
-      if !File.exists?(File.join(tracking, port))
+      tracking_port = File.join(TRACKING_PORTS, category, port)
+      if !File.exists?(tracking_port)
         puts "Skipping #{port}. No tracking port."
         next
       end
 
       puts port
-      diff = IO.popen(['git', 'diff', File.join(tracking, port)]) {|io| io.read}
+      #last_commit = IO.popen(['git', 'log', '-1', '--format=format:%H', ':/Auto-commit changes to tracking ports']) {|io| io.read}
+      #diff = IO.popen(['git', 'diff', "#{last_commit}^", tracking_port]) {|io| io.read}
+      diff = IO.popen(['git', 'diff', tracking_port]) {|io| io.read}
       if diff.size > 0 && $?.exitstatus == 0
         IO.popen(['git', 'apply', '-p2', "--directory=#{CUSTOM_PORTS}", '-'], 'w') {|io| io.write(diff)}
         if $?.exitstatus > 0
@@ -108,25 +109,51 @@ def update_custom_ports
   end #do
 
   # Copy the new updated custom ports to the macports sources folder
-  `sudo cp -r #{CUSTOM_PORTS}/* #{MACPORTS_PORTS}`
+  print `sudo cp -r #{CUSTOM_PORTS}/* #{MACPORTS_PORTS}`
 
   # Refresh the portindex
-  `sudo portindex #{MACPORTS_PORTS}`
-
-  #puts `git add #{custom_ports} && git commit -m "Auto-commit tracking patches applied to custom ports"`
-  #exit if $?.exitstatus > 0
+  print `sudo portindex #{MACPORTS_PORTS}`
 end #def
 
-def review_errors
+def commit_changes
+  if !repo_clean?(TRACKING_PORTS)
+    print "Commit tracking changes to git? (Y/n): "
+    if get_input(%w(y n), 'y') == 'y'
+      puts "Committing changes."
+      print IO.popen(['git', 'add', TRACKING_PORTS]) {|io| io.read}
+      print IO.popen(['git', 'commit', '-m', 'Auto-commit changes to tracking ports']) {|io| io.read} if $?.exitstatus == 0
+    end
+  end
+
+  if !repo_clean?(CUSTOM_PORTS)
+    print "Commit patches to custom ports to git? (Y/n): "
+    if get_input(%w(y n), 'y') == 'y'
+      puts "Committing changes."
+      print IO.popen(['git', 'add', CUSTOM_PORTS]) {|io| io.read}
+      print IO.popen(['git', 'commit', '-m', 'Auto-commit patches applied to custom ports']) {|io| io.read} if $?.exitstatus == 0
+    end
+  end
 end
 
-def copy_new_from_macports(category, port)
+def copy_new_from_macports(port)
+  category = IO.popen(['port', '-q', 'info', '--category', port]) {|io| io.read}.split(",")[0]
+  exit if category.nil?
+
+  tracking = File.join(TRACKING_PORTS, category)
+  FileUtils.mkdir_p(tracking) if !File.exists?(tracking)
+  macport = File.join(MACPORTS_PORTS, category, port)
+  exit if !File.exists?(macport)
+
+  FileUtils.cp_r(macport, tracking)
 end
 
 case ARGV[0]
 when "sync"
   update_tracking_from_macports
   update_custom_ports
+  commit_changes
+when "copy"
+  copy_new_from_macports(ARGV[1])
 when "test"
   puts get_input(%w(a b c), "c")
 else
