@@ -37,7 +37,7 @@ def update_tracking_from_macports
     exit
   end
 
-  puts "Running `port sync`"
+  puts "Running `sudo port sync`"
   print `sudo port sync`
 
   Dir.foreach(CUSTOM_PORTS) do |category|
@@ -78,7 +78,7 @@ def update_custom_ports
       puts port
       #last_commit = IO.popen(['git', 'log', '-1', '--format=format:%H', ':/Auto-commit changes to tracking ports']) {|io| io.read}
       #diff = IO.popen(['git', 'diff', "#{last_commit}^", tracking_port]) {|io| io.read}
-      diff = IO.popen(['git', 'diff', tracking_port]) {|io| io.read}
+      diff = IO.popen(['git', 'diff', '-w', tracking_port]) {|io| io.read}
       if diff.size > 0 && $?.exitstatus == 0
         IO.popen(['git', 'apply', '-p2', "--directory=#{CUSTOM_PORTS}", '-'], 'w') {|io| io.write(diff)}
         if $?.exitstatus > 0
@@ -157,5 +157,6 @@ when "copy"
 when "test"
   puts get_input(%w(a b c), "c")
 else
-  puts "Usage: #{__FILE__} <sync>"
+  puts "Usage: #{__FILE__} sync"
+  puts "Usage: #{__FILE__} copy <portname>"
 end
