@@ -23,9 +23,9 @@ build	{}
 
 set libdir		${prefix}/lib/postgresql84
 set dbdir		${prefix}/var/db/postgresql/defaultdb84
-set logdir		${prefix}/var/log/postgresql84
-set dbuser		postgresql
-set dbgrp		postgresql
+set logdir		${prefix}/var/db/postgresql/log
+set dbuser		postgres
+set dbgrp		nobody
 
 default_variants +apple_launchd
 

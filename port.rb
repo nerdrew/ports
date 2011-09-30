@@ -31,6 +31,10 @@ def get_input(allowed, default = nil)
   return input
 end
 
+def get_category(port)
+  return IO.popen(['port', '-q', 'info', '--category', port.strip]) {|io| io.read}.split(",")[0].strip
+end
+
 def update_tracking_from_macports
   if !repo_clean?(TRACKING_PORTS)
     puts "Commit changes before running!"
@@ -136,7 +140,7 @@ def commit_changes
 end
 
 def copy_new_from_macports(port)
-  category = IO.popen(['port', '-q', 'info', '--category', port]) {|io| io.read}.split(",")[0]
+  category = get_category(port)
   exit if category.nil?
 
   tracking = File.join(TRACKING_PORTS, category)
@@ -147,6 +151,28 @@ def copy_new_from_macports(port)
   FileUtils.cp_r(macport, tracking)
 end
 
+def overwrite_macport(*ports)
+  ports.each do |port|
+    category = get_category(port)
+    if category.nil?
+      puts "No category found for: #{port}"
+      exit 
+    end
+
+    custom = File.join(CUSTOM_PORTS, category, port)
+    if !File.exists?(custom)
+      puts "No custom port: #{port}"
+      exit 
+    end
+    macport = File.join(MACPORTS_PORTS, category)
+
+    print IO.popen(['sudo', 'cp', '-r', custom, macport]){|io| io.read}
+  end #ports.each do
+
+  # Refresh the portindex
+  print `sudo portindex #{MACPORTS_PORTS}`
+end
+
 case ARGV[0]
 when "sync"
   update_tracking_from_macports
@@ -154,6 +180,8 @@ when "sync"
   commit_changes
 when "copy"
   copy_new_from_macports(ARGV[1])
+when "overwrite"
+  overwrite_macport(*ARGV[1..-1])
 when "test"
   puts get_input(%w(a b c), "c")
 else

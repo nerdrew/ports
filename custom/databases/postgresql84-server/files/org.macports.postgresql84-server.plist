@@ -5,9 +5,9 @@
 <dict>
 <key>Label</key><string>org.macports.postgresql84-server</string>
 <key>UserName</key>
-<string>postgresql</string>
+<string>postgres</string>
 <key>GroupName</key>
-<string>postgresql</string>
+<string>nobody</string>
 
 <key>EnvironmentVariables</key>
 <dict>
@@ -23,10 +23,10 @@
 </array>
 
 <key>StandardOutPath</key>
-<string>/opt/local/var/log/postgresql/postgresql84.log</string>
+<string>/opt/local/var/db/postgresql/log/84.log</string>
 
 <key>StandardErrorPath</key>
-<string>/opt/local/var/log/postgresql/postgresql84.log</string>
+<string>/opt/local/var/db/postgresql/log/84.log</string>
 
 <key>Debug</key><false/>
 <key>Disabled</key><true/>
