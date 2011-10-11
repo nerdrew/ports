@@ -5,7 +5,7 @@
 <dict>
 <key>Label</key><string>org.macports.postgresql84-server</string>
 <key>UserName</key>
-<string>postgres</string>
+<string>_postgres</string>
 <key>GroupName</key>
 <string>nobody</string>
 

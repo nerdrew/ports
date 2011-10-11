@@ -1,8 +1,13 @@
 require 'fileutils' 
 
 TRACKING_PORTS = "tracking"
-MACPORTS_PORTS = "/opt/local/var/macports/sources/rsync.macports.org/release/tarballs/ports"
-#MACPORTS_PORTS = "/Users/andrew/CleanRoom/10.6opt/local/var/macports/sources/rsync.macports.org/release/ports"
+if File.directory?("/opt/local/var/macports/sources/rsync.macports.org/release/tarballs/ports")
+  MACPORTS_PORTS = "/opt/local/var/macports/sources/rsync.macports.org/release/tarballs/ports"
+elsif File.directory?("/opt/local/var/macports/sources/rsync.macports.org/release/ports")
+  MACPORTS_PORTS = "/opt/local/var/macports/sources/rsync.macports.org/release/ports"
+else
+  raise "No ports dir found!"
+end
 CUSTOM_PORTS = "custom"
 
 def repo_clean?(dir = nil)

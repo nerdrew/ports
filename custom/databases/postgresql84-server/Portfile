@@ -24,7 +24,7 @@ build	{}
 set libdir		${prefix}/lib/postgresql84
 set dbdir		${prefix}/var/db/postgresql/defaultdb84
 set logdir		${prefix}/var/db/postgresql/log
-set dbuser		postgres
+set dbuser		_postgres
 set dbgrp		nobody
 
 default_variants +apple_launchd
@@ -42,11 +42,6 @@ variant macports_launchd description {use macports default launchd config} {
 variant apple_launchd description {use a more apple-like launchd config} {}
 
 destroot {
-	addgroup ${dbgrp}
-	set gid [existsgroup ${dbgrp}]
-	adduser ${dbuser} shell=/bin/sh gid=${gid} \
-		home=${prefix}/var/db/postgresql \
-		realname=PostgreSQL\ Server
 	xinstall -m 755 -d ${destroot}${logdir}
 	system "touch ${destroot}${logdir}/postgres.log"
 	system "chown ${dbuser}:${dbgrp} ${destroot}${logdir}/postgres.log"
