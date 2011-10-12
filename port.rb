@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'fileutils' 
 
 TRACKING_PORTS = "tracking"
@@ -50,10 +52,9 @@ def update_tracking_from_macports
   print `sudo port sync`
 
   Dir.foreach(CUSTOM_PORTS) do |category|
-    next if category == "." || category == ".."
+    next if category == "." || category == ".." || !File.directory?(File.join(TRACKING_PORTS, category, port))
 
     tracking = File.join(TRACKING_PORTS, category)
-    FileUtils.mkdir_p(tracking) if !File.exists?(tracking)
     Dir.foreach(File.join(CUSTOM_PORTS, category)) do |port|
       next if port == "." || port == ".."
 
@@ -150,10 +151,15 @@ def copy_new_from_macports(port)
 
   tracking = File.join(TRACKING_PORTS, category)
   FileUtils.mkdir_p(tracking) if !File.exists?(tracking)
+
+  custom = File.join(CUSTOM_PORTS, category)
+  FileUtils.mkdir_p(custom) if !File.exists?(custom)
+
   macport = File.join(MACPORTS_PORTS, category, port)
   exit if !File.exists?(macport)
 
   FileUtils.cp_r(macport, tracking)
+  FileUtils.cp_r(macport, custom)
 end
 
 def overwrite_macport(*ports)
