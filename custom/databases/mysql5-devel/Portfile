@@ -35,8 +35,8 @@ master_sites \
     http://ftp.plusline.de/mysql/Downloads/MySQL-${branch}/
 
 checksums md5     462ab3752dd666ec06ca32f92673b59e \
-          sha1    3b17e20be4e8bcc0f94392fb444f4a09f80de2e4 \
-          rmd160  1c84fc3967691e9eedd1b90df780a9d738a709c4
+          sha1    1a3372f9179bfc21cba0005c339a72f8e1458483 \
+          rmd160  c1581d56b3bf254077c709375e7ae48a21748be1
 
 depends_lib \
     port:zlib \

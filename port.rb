@@ -52,11 +52,11 @@ def update_tracking_from_macports
   print `sudo port sync`
 
   Dir.foreach(CUSTOM_PORTS) do |category|
-    next if category == "." || category == ".." || !File.directory?(File.join(TRACKING_PORTS, category, port))
+    next if category == "." || category == ".."
 
     tracking = File.join(TRACKING_PORTS, category)
     Dir.foreach(File.join(CUSTOM_PORTS, category)) do |port|
-      next if port == "." || port == ".."
+      next if port == "." || port == ".." || !File.directory?(File.join(TRACKING_PORTS, category, port))
 
       macport = File.join(MACPORTS_PORTS, category, port)
       next if !File.exists?(macport)
@@ -198,4 +198,5 @@ when "test"
 else
   puts "Usage: #{__FILE__} sync"
   puts "Usage: #{__FILE__} copy <portname>"
+  puts "Usage: #{__FILE__} overwrite <portname> [<portname>...]"
 end
