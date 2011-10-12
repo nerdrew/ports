@@ -124,6 +124,7 @@ post-destroot {
     foreach f [glob -tails -directory ${destroot}${bindir} my*] {
         ln -sf ${bindir}/${f} ${destroot}${prefix}/bin/${f}${major_version}
     }
+    ln -s ${libdir}/mysql/libmysqlclient.*.dylib ${destroot}${prefix}/lib
 }
 
 post-install {
