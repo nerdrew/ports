@@ -1,4 +1,4 @@
-# $Id: Portfile 71533 2010-09-15 20:26:12Z ryandesign@macports.org $
+# $Id: Portfile 89561 2012-02-02 20:48:13Z ryandesign@macports.org $
 
 PortSystem			1.0
 name            	avr-gcc
@@ -13,7 +13,7 @@ long_description	GNU compilers collection (c and c++) for avr.
 homepage			http://gcc.gnu.org/
 platforms       	darwin
 categories      	cross devel
-maintainers     	gmail.com:metamagix
+maintainers     	nomaintainer
 master_sites		gnu:gcc/gcc-${version}/
 distfiles			gcc-${version}.tar.bz2
 worksrcdir			gcc-${version}
