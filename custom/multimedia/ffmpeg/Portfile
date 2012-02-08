@@ -51,7 +51,7 @@ master_sites    http://www.ffmpeg.org/releases/
 
 use_bzip2       yes
 
-checksums       sha1    df4983c028a61d4bf3baceab3bae535b91b8928a \
+checksums       sha1    a3a7fe25db760a99d51266b33386da9c8552feef \
                 rmd160  a60568d4e8bd1a44a2c986e0648cfacba766bcd4
 
 depends_build   port:pkgconfig \
