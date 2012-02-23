@@ -1,10 +1,11 @@
 # -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=
-# $Id: Portfile 89489 2012-01-31 23:15:44Z ryandesign@macports.org $
+# $Id: Portfile 89757 2012-02-09 20:10:26Z blair@macports.org $
 
 PortSystem          1.0
 
 name                apache2
 version             2.2.22
+revision            1
 categories          www
 maintainers         nomaintainer
 license             Apache-2
@@ -72,6 +73,7 @@ configure.args     --with-apr=${prefix}/bin/apr-1-config \
                    --with-pcre=${prefix} \
                    --mandir=${prefix}/share/man \
                    --enable-mods-shared=all \
+                   --enable-authn-alias=shared \
                    --enable-ssl \
                    --with-ssl=${prefix} \
                    --enable-cache \
